@@ -1,0 +1,122 @@
+{% extends "data_manager_app/base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/data.css' %}">
+{% endblock %}
+{% block content %}
+    <h2 id="message" class="text-center">{{ message }}</h2>
+    <div class="buttons" id="buttons">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#search">
+            Search
+        </button>
+        {% if request.user.role.role_name != 'guest' %}
+            <button class="my-button btn btn-success" onclick="openForm()">Add data</button>
+        {% endif %}
+    </div>
+    {% if request.user.role.role_name != 'guest' %}
+        <div class="add-frame" id="add-frame">
+            <form id="data" method="post" action="{% url 'data_page' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h4 id= "form-label" class="text-center"> Add Data </h4>
+                <div class="display-form">
+                    {% for field in form %}
+                        <div class="form-group col-6" style="display:flex;">
+                            <label class="col-4">{{ field.label }}</label>
+                            <div class="col-8 text-center">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    <input type="submit" id='submit' class="btn btn-success"/>
+                    <button type="button" id="cancel" class="btn btn-danger my-danger-button" onclick="closeForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
+    <div id="container-data">
+        <div class="data-content" id="data-content">
+            {% for data in datas %}
+                <div class="box">
+                    {%  if  data.data_avatar %}
+                        <a href="{% url 'data_detail' data.data_id %}"><img src="{{ data.data_avatar.url }}"></img></a>
+                    {% else %}
+                        <a href="{% url 'data_detail' data.data_id %}"><img src="{% static 'images/db.png' %}" alt=""></a>
+                    {% endif %}
+                    <div class="data-name"> {{ data.name }}</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <nav aria-label="Page navigation example" class="paginator">
+            <ul class="pagination justify-content-center">
+                {% if datas.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ datas.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                {% endif %}
+
+                {% if datas.number|add:'-4' > 1 %}
+                    <li class="page-item"><a class="page-link" href="?page={{ datas.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+
+                {% for i in datas.paginator.page_range %}
+                    {% if datas.number == i %}
+                        <li class="page-item active" aria-current="page">
+              <span class="page-link">
+                {{ i }}
+                <span class="sr-only">(current)</span>
+              </span>
+                        </li>
+                    {% elif i > datas.number|add:'-5' and i < datas.number|add:'5' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if datas.paginator.num_pages > datas.number|add:'4' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ datas.number|add:'5' }}">&hellip;</a></li>
+                {% endif %}
+
+                {% if datas.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ datas.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock %}
+{%  block javascript %}
+    <script src="{% static 'js/data.js' %}"></script>
+{% endblock %}
+{% block modal %}
+    <div class="modal fade" id="search" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <form action="{% url 'search_data' %}" method="GET">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Search</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{  search_form }}
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success"/>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

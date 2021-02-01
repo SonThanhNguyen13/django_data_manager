@@ -1,0 +1,103 @@
+{% extends "data_manager_app/base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/dataCategory.css' %}">
+{% endblock %}
+{% block content %}
+    {% if request.user.role.role_name != 'guest' %}
+        <div class="add-frame" id="add-frame">
+            <form id="data-category" method="post" action="#">
+                {% csrf_token %}
+                <h4 id= "form-label" class="text-center"> Add Category <h4>
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <div class="text-center">
+                        <input type="submit" id='submit' class="btn btn-success" onclick="closeAddForm()"></input>
+                        <button type="button" id="cancel" class="btn btn-danger my-danger-button" onclick="closeAddForm()">Cancel</button>
+                    </div>
+                    <form>
+        </div>
+        <button id="{% url 'data_category' %}" class="btn btn-success my-success-button" onclick="openAddForm(this.id)">Add category</button>
+    {% endif %}
+    <div class="table-content" id="table-content">
+        <h2 id="message" class="text-center"></h2>
+        <table class="table table-striped table-sm" id="data-table">
+            <thead class="thead-dark">
+            <tr>
+                <th class="text-center"> Id </th>
+                <th class="text-center">Data category</th>
+                <th class="action text-center">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in datas %}
+                <tr>
+                    <td class="text-center"> {{forloop.counter}} </td>
+                    <td id={{ data.data_category_id }} class="text-center">{{ data.name }}</td>
+                    {% if request.user.role.role_name != 'guest' %}
+                        <td class="action text-center"><button class="btn btn-danger" onclick="onClick(this.id)" id="{% url 'update_data_category' data.data_category_id %}">Edit</button></td>
+                    {% else %}
+                        <td class="action text-center">None</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <!-- Stolen -->
+    </div>
+    <nav aria-label="Page navigation example" class="paginator">
+        <ul class="pagination justify-content-center">
+            {% if datas.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ datas.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            {% endif %}
+
+            {% if datas.number|add:'-4' > 1 %}
+                <li class="page-item"><a class="page-link" href="?page={{ datas.number|add:'-5' }}">&hellip;</a></li>
+            {% endif %}
+
+            {% for i in datas.paginator.page_range %}
+                {% if datas.number == i %}
+                    <li class="page-item active" aria-current="page">
+              <span class="page-link">
+                {{ i }}
+                <span class="sr-only">(current)</span>
+              </span>
+                    </li>
+                {% elif i > datas.number|add:'-5' and i < datas.number|add:'5' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if datas.paginator.num_pages > datas.number|add:'4' %}
+                <li class="page-item"><a class="page-link" href="?page={{ datas.number|add:'5' }}">&hellip;</a></li>
+            {% endif %}
+
+            {% if datas.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ datas.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- End stolen -->
+
+
+{% endblock content %}
+{% block javascript %}
+    <script src="{% static 'js/dataCategory.js' %}"> </script>
+{% endblock javascript %}

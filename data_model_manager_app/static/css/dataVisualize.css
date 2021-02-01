@@ -1,0 +1,31 @@
+body{
+    background-image: url("/static/images/w.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+#all-data-chart{
+    margin-left:0 !important;
+    width: 50% !important;
+    height: 80% !important;
+}
+.all-data{
+    width: 100% !important;
+    display: flex
+}
+#container-chart{
+    margin-left:0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+canvas{
+    display: block !important;
+    margin:0 !important;
+    padding:0 !important;
+}
+#analyzed-data-chart{
+    margin-top: 2%;
+    margin-left:0 !important;
+    width: 50% !important;
+    height: 80% !important;
+}

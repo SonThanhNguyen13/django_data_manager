@@ -1,0 +1,64 @@
+body{
+  background-image: url("/static/images/bg02.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.add-frame{
+  display: none;
+  width:50%;
+  margin:auto;
+  padding: 5%;
+  border: solid 2px rgb(5, 5, 5);
+  border-radius: 5%;
+  background-color: white;
+} 
+
+.container{
+margin-top:5%;
+}
+.btn-success{
+  height: 50px !important;
+}
+.my-danger-button{
+  height: 50px !important;
+}
+.my-success-button{
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+}
+.action{
+  width:20%;
+}
+table{
+  background-color:white;
+}
+.pagination{
+  bottom:0 !important;
+}
+#page-content { 
+  animation: fadeInAnimation ease 2s; 
+  animation-iteration-count: 1; 
+  animation-fill-mode: forwards; 
+} 
+@keyframes fadeInAnimation { 
+  0% { 
+      opacity: 0; 
+  } 
+  100% { 
+      opacity: 1; 
+  } 
+}
+#data-table{
+  width: 80%;
+  margin: auto
+}
+.paginator{
+    margin-top: 3%;
+}
+#content{
+
+}
+

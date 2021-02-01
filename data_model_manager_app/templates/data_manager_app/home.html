@@ -1,0 +1,23 @@
+{% extends "data_manager_app/base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="category">
+    {% for i in full_data %}
+        <h2>Category: {{ i.0 }}</h2>
+        <div class="data-content" id="data-content">
+        {% for j in i.1 %}
+            <div class="box">
+                {%  if  j.data_avatar %}
+                    <a href="{% url 'data_detail' j.data_id %}"><img src="{{ j.data_avatar.url }}"></img></a>
+                {% else %}
+                    <a href="{% url 'data_detail' j.data_id %}"><img src="{% static 'images/db.png' %}" alt=""></a>
+                {% endif %}
+                <div class="data-name"> {{ j.name }}</div>
+            </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+{% endblock %}

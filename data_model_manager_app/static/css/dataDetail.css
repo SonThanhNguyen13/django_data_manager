@@ -1,0 +1,74 @@
+body{
+    background-image: url("/static/images/bg03.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+.display-form{
+    display: flex;
+    flex-wrap: wrap;
+    color: black;
+}
+.edit-frame{
+    display: none;
+    width:70%;
+    margin:auto;
+    padding: 5%;
+    border: solid 2px rgb(5, 5, 5);
+    border-radius: 5%;
+    background-color: white;
+}
+input[type="text"], input[type="number"]{
+    text-align:right;
+}
+input[type="file"]{
+    border: none;
+}
+input[type="file"]:focus{
+    border: none;
+}
+select{
+    direction: RTL;
+    appearance: none;
+}
+.form-control{
+    justify-content: center;
+}
+.my-button{
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+}
+.data-detail-content{
+    display: flex;
+}
+.data-image img{
+    width: 400px;
+    height: 600px;
+}
+.data-detail{
+    margin-left: 5%;
+    width: 100%;
+}
+.row{
+    margin: auto;
+    display: flex;
+}
+.row h2{
+    width : 80%;
+}
+.row span{
+    width : 20%;
+    justify-content: center;
+    top: 50%;
+    left: 50%;
+}
+.delete-confirm{
+    display: none;
+}
+.buttons{
+    display: flex;
+}
+#container-data-detail{
+    margin-left: 5%;
+}

@@ -1,0 +1,56 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Login</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  </head>
+  <body>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    <h2 class="active"> Sign In </h2>
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <img src="{% static 'images/images.jpeg' %}" id="icon" alt="User Icon" />
+    </div>
+
+    <!-- Login Form -->
+    <form action="{% url 'login' %}" method="POST">
+      {% csrf_token %}
+      <input type="text" id="username" class="fadeIn second" name="username" placeholder="username" onkeyup="validate()" onchange="validate()">
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password" onkeyup="validate()" onchange="validate()">
+      <input type="submit" id="submit" class="fadeIn third" value="Log In" disabled>
+      {% if messages %}
+        {% for message in messages %}
+          <div class="sign_up">
+              <p style="color: red; font-size: large;">{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <a class="underlineHover sign_up" href="#">Sign Up</a>
+    </form>
+
+    <!-- Remind Passowrd -->
+    <div id="formFooter">
+      <div class="footer">
+        <a class="underlineHover" href="#">Forgot Password?</a>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/login.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    
+  </body>
+</html>
