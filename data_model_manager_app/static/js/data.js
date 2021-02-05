@@ -39,3 +39,6 @@ function closeForm(){
     document.getElementById("container-data").style.display ="block"
 
 }
+$(window).on("load",function(){
+    $("#loader-wrapper").fadeOut("fast");
+});

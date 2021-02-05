@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
@@ -36,11 +37,13 @@ class LoginView(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
-        user.role = queries.get_role_by_name('guest')
-        print(user.role)
         if user:
-            login(request, user)
-            return redirect("/")
+            if user.is_active:
+                login(request, user)
+                return redirect("/")
+            else:
+                messages.error(request, "Invalid username or password")
+                return redirect("/login/")
         else:
             messages.error(request, "Invalid username or password")
             return redirect("/login/")
@@ -83,3 +86,20 @@ class ChangePassword(LoginRequiredMixin, View):
         update_session_auth_hash(request, user)
         messages.info(request, "Change password successfully")
         return redirect("/change_password")
+
+
+# fun
+class Fun(View):
+    def get(self, request):
+        pages = [
+            'home',
+            'change_password',
+            'data_category',
+            'data_page',
+            'data_visualize',
+            'ai_model',
+            'model_visualize',
+            'model_train_data',
+        ]
+        page = random.choice(pages)
+        return render(request, 'data_manager_app/fun.html', {'page':page})

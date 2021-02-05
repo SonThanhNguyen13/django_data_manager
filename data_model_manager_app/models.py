@@ -85,29 +85,30 @@ class AiModel(models.Model):
     def __str__(self):
         return self.model_name
 
-
+# mai fix :D
 class Data(models.Model):
     data_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=512)
     data_category = models.ForeignKey(DataCategory, on_delete=models.CASCADE)
-    size_on_disk = models.PositiveIntegerField()
+    size_on_disk = models.FloatField()
     directory_of_data = models.CharField(max_length=512, blank=True, null=True)
     number_of_images = models.PositiveIntegerField()
     number_of_classes = models.PositiveIntegerField(null=True, blank=True)
-    iqa_0 = models.PositiveIntegerField(null=True, blank=True)
-    iqa_1 = models.PositiveIntegerField(null=True, blank=True)
-    iqa_2 = models.PositiveIntegerField(null=True, blank=True)
-    iqa_3 = models.PositiveIntegerField(null=True, blank=True)
-    iqa_4 = models.PositiveIntegerField(null=True, blank=True)
-    shape_0 = models.PositiveIntegerField(null=True, blank=True)
-    shape_1 = models.PositiveIntegerField(null=True, blank=True)
-    shape_2 = models.PositiveIntegerField(null=True, blank=True)
-    shape_3 = models.PositiveIntegerField(null=True, blank=True)
-    shape_4 = models.PositiveIntegerField(null=True, blank=True)
+    brisque = models.FloatField(null=True, blank=True)
+    brightness = models.FloatField(null=True, blank=True)
+    sharpness = models.FloatField(null=True, blank=True)
+    iqa_3 = models.FloatField(null=True, blank=True)
+    iqa_4 = models.FloatField(null=True, blank=True)
+    mean_width = models.FloatField(null=True, blank=True)
+    mean_height = models.FloatField(null=True, blank=True)
+    shape_2 = models.FloatField(null=True, blank=True)
+    shape_3 = models.FloatField(null=True, blank=True)
+    shape_4 = models.FloatField(null=True, blank=True)
     analyzed = models.BooleanField(default=False)
-    best_result = models.FloatField(null=True, blank=True)
+    best_result = models.CharField(max_length=512, null=True, blank=True)
     best_analyzed_model = models.ForeignKey(AiModel, on_delete=models.SET_NULL, null=True, blank=True)
     data_avatar = models.ImageField(upload_to="data/data_avatar", default=None, null=True, blank=True)
+    note = models.CharField(null=True, blank=True, max_length=1024)
     data_owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -119,3 +120,4 @@ class ModelTrainData(models.Model):
     data = models.ForeignKey(Data, on_delete=models.CASCADE)
     model = models.ForeignKey(AiModel, on_delete=models.CASCADE)
     added_by = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
+    result = models.FloatField(default=0.0)

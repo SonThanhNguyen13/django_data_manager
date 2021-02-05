@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello from STN</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/fun.css' %}">
+</head>
+<body>
+<div class="text-center">
+    <h1 style="color: firebrick">Whoops, Nothing here</h1>
+    <a href="{% url page %}" class="text-center"> Click here to return to some random page</a>
+    <p>If not logged in, you will be redirect to login page </p>
+    <div class="text-center">
+        <img src="{% static 'images/fun.jpeg' %}" alt="meme" style="margin-top: 5px">
+    </div>
+</div>
+</body>
+<div class="loader-wrapper">
+    <span class="loader"><span class="loader-inner"></span></span>
+</div>
+<script src="{% static 'js/fun.js' %}"></script>
+</html>

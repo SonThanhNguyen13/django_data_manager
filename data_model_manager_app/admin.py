@@ -22,20 +22,20 @@ class UserCreationForm(forms.ModelForm):
 class CustomUserAdmin(UserAdmin):
     # The forms to add and change user instances
     add_form = UserCreationForm
-    list_display = ("username", 'role_id')
+    list_display = ("username", 'role')
     ordering = ("username",)
 
     fieldsets = (
-        (None, {'fields': ('username', 'password', 'role_id', 'is_superuser', 'is_active')}),
+        (None, {'fields': ('username', 'password', 'role', 'is_superuser', 'is_active')}),
         )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password', 'is_superuser', 'is_staff', 'role_id')}
+            'fields': ('username', 'password', 'is_superuser', 'is_staff', 'role')}
             ),
         )
 
-    list_filter = ["is_superuser", "role_id"]
+    list_filter = ["is_superuser", "role"]
 
 
 class ShowRole(admin.ModelAdmin):

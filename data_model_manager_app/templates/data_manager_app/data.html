@@ -44,6 +44,8 @@
                         <a href="{% url 'data_detail' data.data_id %}"><img src="{% static 'images/db.png' %}" alt=""></a>
                     {% endif %}
                     <div class="data-name"> {{ data.name }}</div>
+                    <div class="data-name">{{ data.size_on_disk }} GB</div>
+                    <div class="data-name">owner: {{ data.data_owner }} </div>
                 </div>
             {% endfor %}
         </div>
@@ -119,4 +121,9 @@
             </div>
         </form>
     </div>
+{% endblock %}
+{% block loading %}
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
 {% endblock %}

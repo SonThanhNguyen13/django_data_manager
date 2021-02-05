@@ -16,8 +16,17 @@
                     <a href="{% url 'data_detail' j.data_id %}"><img src="{% static 'images/db.png' %}" alt=""></a>
                 {% endif %}
                 <div class="data-name"> {{ j.name }}</div>
+                 <div class="data-name"> ({{ j.size_on_disk }} GB)</div>
             </div>
         {% endfor %}
     </div>
     {% endfor %}
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+{% block loading %}
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
 {% endblock %}

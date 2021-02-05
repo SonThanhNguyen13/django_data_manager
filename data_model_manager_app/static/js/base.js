@@ -18,5 +18,6 @@
 	});
 
 })(jQuery);
-
-// sua sau
+$(window).on("load",function(){
+    $("#loader-wrapper").fadeOut("fast");
+});

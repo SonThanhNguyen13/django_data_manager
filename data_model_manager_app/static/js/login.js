@@ -8,3 +8,6 @@ function validate(){
         $('#submit').removeAttr('disabled')
     }
 }
+$(window).on("load",function(){
+    $(".loader-wrapper").fadeOut("slow");
+});

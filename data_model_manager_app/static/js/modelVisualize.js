@@ -1,4 +1,7 @@
 $(document).ready(function() {
+      document.title = "Models Visualize"
+});
+$(document).ready(function() {
     // draw charts
     let all_model_chart = $("#all-model-chart");
     $.ajax({
@@ -61,3 +64,7 @@ $(document).ready(function() {
         }
     });
 });
+$(window).on("load",function(){
+    $("#loader-wrapper").fadeOut("fast");
+});
+

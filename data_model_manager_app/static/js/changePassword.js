@@ -1,3 +1,6 @@
+$(document).ready(function() {
+      document.title = "Change password"
+});
 function validate_change_password(){
 	let password = $("#password")[0].value
 	let new_password = $('#new')[0].value
@@ -18,3 +21,6 @@ function validate_change_password(){
 function dataFadeIn(){
 	$("#container").fadeIn("slow");
 }
+$(window).on("load",function(){
+    $("#loader-wrapper").fadeOut("fast");
+});

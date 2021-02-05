@@ -4,91 +4,116 @@
     <link rel="stylesheet" href="{% static 'css/dataDetail.css' %}">
 {% endblock %}
 {% block content %}
+    <div class="control">
+        <a href="{% url 'data_page' %}" style="color:blue"><< Return to data page</a>
+        {% if request.user.role.role_name != 'guest' %}
+            <button class="my-button btn btn-success" onclick="openForm()">Edit data</button>
+        {% endif %}
+    </div>
     <h2 id="message" class="text-center">{{ message }}</h2>
-    <a href="{% url 'data_page' %}" style="color:blue"><< Return to data page</a>
     {% if request.user.role.role_name != 'guest' %}
-        <button class="my-button btn btn-success" onclick="openForm()">Edit data</button>
         <div class="delete-confirm" id="delete-confirm">
             <form id="confirm-delete">
                 {% csrf_token %}
                 <h4 class="text-center"> Delete </h4>
                 <h5 class="text-center">Are you sure you want to delete {{ data.name }}</h5>
                 <div class="text-center">
-                    <input type="submit" class="btn btn-success"/>
+                    <input type="submit" class="btn btn-success" value="Yes"/>
                     <button type="button" class="btn btn-danger my-danger-button" onclick="closeDeleteConfirm()">No</button>
                 </div>
             </form>
         </div>
     {% endif %}
-    <div id="container-data-detail" >
+
+    <div id="container-data-detail">
         <div class="data-detail-content" id="data-detail-content">
             <h3 class="message"></h3>
-            <div class="data-image">
+            <div class="data-image col-3">
                 {%  if  data.data_avatar %}
                     <img id="image" src="{{ data.data_avatar.url }}"></img>
                 {% else %}
                     <img id="image" src="{% static 'images/db.png' %}" alt="">
                 {% endif %}
             </div>
-            <div class="data-detail">
+            <div class="data-detail col-9">
                 <div class="row">
-                    <span>Id</span>
-                    <h3>{{ data.data_id }}</h3>
+                    <span class="col-md-2">Data name</span>
+                    <h3 class="col-md-10" id="name">{{ data.name }}</h3>
                 </div>
                 <div class="row">
-                    <span>Data name</span>
-                    <h3 id="name">{{ data.name }}</h3>
+                    <span class="col-md-2">Data Category</span>
+                    <h3 class="col-md-10" id="category">{{ data.data_category }}</h3>
                 </div>
                 <div class="row">
-                    <span>Data Category</span>
-                    <h3 id="category">{{ data.data_category }}</h3>
+                    <span class="col-md-2">Size on disk</span>
+                    <h3 class="col-md-10" id="size_on_disk">{{ data.size_on_disk }} GB</h3>
                 </div>
                 <div class="row">
-                    <span>Size on disk</span>
-                    <h3 id="size_on_disk">{{ data.size_on_disk }} GB</h3>
+                    <span class="col-md-2">Directory</span>
+                    <h3 class="col-md-10" id="directory_of_data">{{ data.directory_of_data }}</h3>
                 </div>
                 <div class="row">
-                    <span>Directory</span>
-                    <h3 id="directory_of_data">{{ data.directory_of_data }}</h3>
+                    <span class="col-md-2">Number of images</span>
+                    <h3 class="col-md-8" id="number_of_images">{{ data.number_of_images }}</h3>
                 </div>
                 <div class="row">
-                    <span>Number of images</span>
-                    <h3 id="number_of_images">{{ data.number_of_images }}</h3>
+                    <span class="col-md-2">Number of classes</span>
+                    <h3 class="col-md-10" id="number_of_classes">{{ data.number_of_classes }}</h3>
+                </div>
+                <div class="row row-table table-responsive">
+                    <table class="table table-borderless" style="width:100%">
+                        <tr>
+                            <td class=""><p>Brisque</p></td>
+                            <td><h4 id="brisque">{{ data.brisque }}</h4></td>
+                            <td>Brightness</td>
+                            <td><h4 id="brightness">{{ data.brightness }}</h4></td>
+                            <td>Sharpness</td>
+                            <td><h4 id="sharpness">{{ data.sharpness }}</h4></td>
+                            <td>iqa_3</td>
+                            <td><h4 id="iqa_3">{{ data.iqa_3 }}</h4></td>
+                            <td>iqa_4</td>
+                            <td><h4 id="iqa_4">{{ data.iqa_4 }}</h4></td>
+                        </tr>
+                        <tr>
+                            <td class=""><p>Mean width</p></td>
+                            <td><h4 id="mean_width" class="">{{ data.mean_width }}</h4></td>
+                            <td><p>Mean height</p></td>
+                            <td><h4 id="mean_height">{{ data.mean_height }}</h4></td>
+                            <td><p>Shape</p></td>
+                            <td><h4 class="" id="shape_2">{{ data.shape_2 }}</h4></td>
+                            <td><p class="">Shape</p></td>
+                            <td><h4 class="" id="shape_3">{{ data.shape_3 }}</h4></td>
+                            <td><p class="">Shape</p></td>
+                            <td><h4 class="" id="shape_4">{{ data.shape_4 }}</h4></td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="row">
-                    <span>Number of classes</span>
-                    <h3 id="number_of_classes">{{ data.number_of_classes }}</h3>
+                    <span class="col-md-2">Analyzed</span>
+                    <h3 class="col-md-10" id="analyzed">{{ data.analyzed }}</h3>
                 </div>
                 <div class="row">
-                    <span>IQA</span>
-                    <h3 id="iqa">{{ data.iqa_0 }}, {{ data.iqa_1 }}, {{ data.iqa_2 }}, {{ data.iqa_3 }}, {{ data.iqa_4 }}</h3>
+                    <span class="col-md-2" >Best analyzed result</span>
+                    <h3 id="best_result" class="col-md-10">{{ data.best_result }}</h3>
                 </div>
                 <div class="row">
-                    <span>Shape</span>
-                    <h3 id="shape">{{ data.shape_0 }}, {{ data.shape_1 }}, {{ data.shape_2 }}, {{ data.shape_3 }}, {{ data.shape_4 }}</h3>
+                    <span class="col-md-2">Best analyzed model</span>
+                    <h3 id="best_analyzed_model" class="col-10">{{ data.best_analyzed_model }}</h3>
                 </div>
                 <div class="row">
-                    <span>Analyzed</span>
-                    <h3 id="analyzed">{{ data.analyzed }}</h3>
+                    <span class="col-md-2">Added by </span>
+                    <h3 id="best_analyzed_model" class="col-10">{{ data.data_owner }}</h3>
                 </div>
                 <div class="row">
-                    <span>Best analyzed result</span>
-                    <h3 id="best_result">{{ data.best_result }}</h3>
-                </div>
-                <div class="row">
-                    <span>Best analyzed model</span>
-                    <h3 id="best_analyzed_model">{{ data.best_analyzed_model }}</h3>
-                </div>
-                <div class="row">
-                    <span>Added by </span>
-                    <h3 id="best_analyzed_model">{{ data.data_owner }}</h3>
+                    <span class="col-md-2">Note</span>
+                    <p class="start col-md-10" id="note" style="color: black; width: 50%">{{ data.note }}</p>
                 </div>
             </div>
         </div>
-        {% if request.user.role.role_name != 'guest' %}
-            <button class="my-button btn btn-danger" onclick="openDeleteConfirm()">Delete</button>
-        {% endif %}
     </div>
+    {% if request.user.role.role_name != 'guest' %}
+        <button class="my-button btn btn-danger" onclick="openDeleteConfirm()">Delete</button>
+    {% endif %}
     {% if request.user.role.role_name != 'guest' %}
         <div class="edit-frame" id="edit-frame">
             <form id="data" method="post" action="{% url 'data_detail' data.data_id %}" enctype="multipart/form-data">
@@ -113,4 +138,9 @@
 {% endblock %}
 {%  block javascript %}
     <script src="{% static 'js/dataDetail.js' %}"></script>
+{% endblock %}
+{% block loading %}
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
 {% endblock %}

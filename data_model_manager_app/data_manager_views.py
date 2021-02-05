@@ -18,11 +18,12 @@ class DataCategoryView(LoginRequiredMixin, View):
 
     def get(self, request):
         """get all data categories"""
-        # get form
+        # get form to add category
         form = self.form_class()
         # get all data category & pagination
         data_category = queries.get_all_data_category(reverse=True)
         paginator = Paginator(data_category, 10)
+        # paginator, 10 per page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         return render(request, "data_manager_app/dataCategory.html",
@@ -42,6 +43,7 @@ class DataCategoryView(LoginRequiredMixin, View):
                 # send to client side.
                 return JsonResponse({"Add data": instance.name}, status=200)
             else:
+                # send form's error
                 str_error = ''
                 for field, errors in form.errors.items():
                     str_error += field + ": "
@@ -92,7 +94,7 @@ class DataPage(LoginRequiredMixin, View):
     def get(self, request):
         form = self.form_class
         # get data id, name, image
-        datas = queries.get_all_data(reverse=True).only("data_id", "name", "data_avatar")
+        datas = queries.get_all_data(reverse=True)
         paginator = Paginator(datas, 30)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -135,33 +137,25 @@ class SearchData(LoginRequiredMixin, View):
     form_search = forms.DataFilterForm
 
     def get(self, request):
+        # get search filter. Filter by anything user input
         query = {}
         name = request.GET.get('name')
         self.add_to_query(query, "name", name)
         data_category = request.GET.get('data_category')
         self.add_to_query(query, "data_category", data_category)
-        size_on_disk = request.GET.get('size_on_disk')
-        self.add_to_query(query, "size_on_disk", size_on_disk)
         directory_of_data = request.GET.get('directory_of_data')
         self.add_to_query(query, "directory_of_data", directory_of_data)
-        number_of_images = request.GET.get('number_of_images')
-        self.add_to_query(query, "number_of_images", number_of_images)
-        number_of_classes = request.GET.get('number_of_classes')
-        self.add_to_query(query, "number_of_classes", number_of_classes)
         data_owner = request.GET.get('data_owner')
         self.add_to_query(query, 'data_owner', data_owner)
         analyzed = request.GET.get('analyzed')
         if analyzed == 'on':
             self.add_to_query(query, "analyzed", True)
-        best_result = request.GET.get('best_result')
-        self.add_to_query(query, "best_result", best_result)
         best_analyzed_model = request.GET.get('best_analyzed_model')
         self.add_to_query(query, "best_analyzed_model", best_analyzed_model)
         if len(query) < 1:
             return redirect('/data/')
-        search_data = queries.get_data_by_filter(
-            reverse=True, **query
-        ).only("data_id", "name", "data_avatar")
+        search_data = queries.get_data_by_filter(reverse=True, **query)
+        # if exist, paginator
         if len(search_data) > 0:
             paginator = Paginator(search_data, 30)
             page_number = request.GET.get('page')
@@ -175,6 +169,7 @@ class SearchData(LoginRequiredMixin, View):
                     "search_form": self.form_search,
                 }
             )
+        # else return "Not found" message
         else:
             return render(
                 request,
@@ -206,24 +201,25 @@ class DataDetail(LoginRequiredMixin, View):
                 'number_of_images': data.number_of_images,
                 "number_of_classes": data.number_of_classes,
                 "directory_of_data": data.directory_of_data,
-                "iqa_0": data.iqa_0,
-                "iqa_1": data.iqa_1,
-                "iqa_2": data.iqa_2,
+                "brisque": data.brisque,
+                "brightness": data.brightness,
+                "sharpness": data.sharpness,
                 "iqa_3": data.iqa_3,
                 "iqa_4": data.iqa_4,
-                "shape_0": data.shape_0,
-                "shape_1": data.shape_1,
+                "mean_width": data.mean_width,
+                "mean_height": data.mean_height,
                 "shape_2": data.shape_2,
                 "shape_3": data.shape_3,
                 "shape_4": data.shape_4,
                 "analyzed": data.analyzed,
                 "best_result": data.best_result,
                 "best_analyzed_model": data.best_analyzed_model,
+                "note": data.note
             }
             form = self.form_class(initial=init_data)
             return render(request, "data_manager_app/dataDetail.html", {"data": data, "form": form})
         else:
-            return HttpResponse("404 not found")
+            return redirect('/fun/')
 
     def post(self, request, id):
         """Update data"""
@@ -283,11 +279,11 @@ class DataDetail(LoginRequiredMixin, View):
         """delete data"""
         url_name = return_url_name(request.path)
         if not has_permission(request.user.role_id, url_name, request.method):
-            return JsonResponse({"error": "No permission"}, status=400)
+            return JsonResponse({"error": "No permission"}, status=403)
         elif request.is_ajax:
             delete_data = queries.get_data_by_id(id)
             if request.user != delete_data.data_owner:
-                return JsonResponse({"error": "No permission"}, status=400)
+                return JsonResponse({"error": "No permission"}, status=403)
             # fix sau khi co du model
             if not delete_data:
                 return JsonResponse({"error": "Not found"}, status=400)
@@ -311,6 +307,7 @@ class Visualize(LoginRequiredMixin, View):
         all_data = queries.get_all_data().count()
         all_category = queries.get_all_data_category().count()
         data_from_model = queries.get_data_by_analyzed()
+        all_size = queries.get_sum_data_size()['size_on_disk__sum']
         true_analyzed = None
         false_analyzed = None
         for i in data_from_model:
@@ -325,7 +322,8 @@ class Visualize(LoginRequiredMixin, View):
                 'number_of_data': all_data,
                 'number_of_category': all_category,
                 'true_analyzed': true_analyzed,
-                'false_analyzed': false_analyzed
+                'false_analyzed': false_analyzed,
+                'all_size': round(all_size, 2),
             }
         )
 
@@ -350,11 +348,13 @@ class Chart(LoginRequiredMixin, View):
         data = []
         # append labels, data and colors
         for i in range(len(all_category)):
-            labels.append(all_category[i].name)
+            cate_data = queries.get_data_by_filter(data_category=all_category[i]).count()
+            if cate_data > 0:
+                labels.append(all_category[i].name)
             # select count data group by category
-            data.append(queries.get_data_by_filter(data_category=all_category[i]).count())
+                data.append(cate_data)
             # no more color? Return to the first
-            colors.append(base_colors[i % len(base_colors)])
+                colors.append(base_colors[i % len(base_colors)])
         # replace colors if last colors == first colors
         if len(colors) > 1:
             if colors[-1] == colors[0]:
@@ -376,7 +376,7 @@ class ChartByAnalyzed(LoginRequiredMixin, View):
     login_url = '/login/'
 
     def get(self, request):
-        base_colors = ['red', 'blue']
+        base_colors = ['blue', 'red']
         labels = []
         data = []
         data_from_model = queries.get_data_by_analyzed()
@@ -388,3 +388,50 @@ class ChartByAnalyzed(LoginRequiredMixin, View):
             'data': data,
             'color': base_colors,
         })
+
+
+class ChartBySize(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def get(self, request):
+        all_category = queries.get_all_data_category()
+        base_colors = [
+            '#d73027', '#1a9850', '#f46d43',
+            '#fdae61', '#fee08b', '#ffffbf',
+            '#d9ef8b', '#a6d96a', '#66bd63',
+            '#1a9850', '#a50026', '#006837',
+        ]
+        # labels
+        labels = []
+        colors = []
+        data = []
+        for i in range(len(all_category)):
+            sum_cate_data_size = queries.get_sum_data_size_by_category(all_category[i])
+            if sum_cate_data_size['size_on_disk__sum']:
+                if sum_cate_data_size['size_on_disk__sum'] > 0:
+                    labels.append(all_category[i].name)
+                    # select count data group by category
+                    data.append(round(sum_cate_data_size['size_on_disk__sum'], 2))
+                    # no more color? Return to the first
+                    colors.append(base_colors[i % len(base_colors)])
+        # check last color = first color
+        if len(colors) > 1:
+            if colors[-1] == colors[0]:
+                new_colors = base_colors.copy()
+                new_colors.remove(colors[-1])
+                new_colors.remove(colors[-2])
+                colors[-1] = random.choice(new_colors)
+        # response to ajax
+        return JsonResponse(
+            data={
+                'labels': labels,
+                'data': data,
+                'color': colors,
+            })
+
+
+class ChartSizeByDirectory(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def get(self, request):
+        pass

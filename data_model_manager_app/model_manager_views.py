@@ -19,6 +19,7 @@ class AiModel(LoginRequiredMixin, View):
         paginator = Paginator(models, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        # add form
         form = self.form_class
         return render(
             request,
@@ -33,7 +34,7 @@ class AiModel(LoginRequiredMixin, View):
     def post(self, request):
         url_name = return_url_name(request.path)
         if not has_permission(request.user.role_id, url_name, request.method):
-            return JsonResponse({'error': 'No permission'}, status=400)
+            return JsonResponse({'error': 'No permission'}, status=403)
         if request.is_ajax():
             form = self.form_class(request.POST)
             if form.is_valid():
@@ -59,7 +60,7 @@ class AiModelDetail(LoginRequiredMixin, View):
     def post(self, request, id):
         url_name = return_url_name(request.path)
         if not has_permission(request.user.role_id, url_name, request.method):
-            return JsonResponse({'error': 'No permission'}, status=400)
+            return JsonResponse({'error': 'No permission'}, status=403)
         if request.is_ajax():
             update_model = queries.get_ai_model_by_id(id)
             if update_model.model_owner == request.user:
@@ -78,14 +79,14 @@ class AiModelDetail(LoginRequiredMixin, View):
                 else:
                     return HttpResponse("404 Not found")
             else:
-                return JsonResponse({'error': 'No permission'}, status=400)
+                return JsonResponse({'error': 'No permission'}, status=403)
         else:
             return JsonResponse({'error': 'Something when terribly wrong'})
 
     def delete(self, request, id):
         url_name = return_url_name(request.path)
         if not has_permission(request.user.role_id, url_name, request.method):
-            return JsonResponse({'error': 'No permission'}, status=400)
+            return JsonResponse({'error': 'No permission'}, status=403)
         if request.is_ajax():
             delete_model = queries.get_ai_model_by_id(id)
             if delete_model.model_owner == request.user:
@@ -95,7 +96,7 @@ class AiModelDetail(LoginRequiredMixin, View):
                 else:
                     return HttpResponse("404 Not found")
             else:
-                return JsonResponse({'error': 'No permission'}, status=400)
+                return JsonResponse({'error': 'No permission'}, status=403)
         else:
             return JsonResponse({'error': 'Something when terribly wrong'})
 
@@ -105,7 +106,7 @@ class ModelVisualize(LoginRequiredMixin, View):
 
     def get(self, request):
         number_of_models = queries.get_all_ai_model().count()
-        number_of_users = queries.get_all_user().count()
+        number_of_users = queries.get_all_user_by_role('user').count()
         return render(
             request,
             'data_manager_app/modelVisualize.html',
@@ -129,6 +130,7 @@ class SearchAiModel(LoginRequiredMixin, View):
             query['model_name'] = model_name
         if model_owner:
             query['model_owner'] = model_owner
+        # if nothing was submit, redirect to model page
         if len(query) < 1:
             return redirect('/models/')
         models = queries.get_model_by_filter(True, **query)
@@ -170,14 +172,15 @@ class ModelChart(LoginRequiredMixin, View):
         labels = []
         models = []
         colors = []
-        all_users = queries.get_all_user()
+        all_users = queries.get_all_user_by_role('user')
         for i in range(len(all_users)):
-            labels.append(all_users[i].username)
-            models.append(queries.get_model_by_filter(model_owner=all_users[i]).count())
-            # append colors from base colors. If base color is full, append from beginning
+            number_of_models = queries.get_model_by_filter(model_owner=all_users[i]).count()
+            if number_of_models > 0:
+                labels.append(all_users[i].username)
+                models.append(number_of_models)
+                # append colors from base colors. If base color is full, append from beginning
             colors.append(base_colors[i % len(base_colors)])
         # check if last color == first color
-        print(labels, models)
         if len(colors) > 1:
             if colors[-1] == colors[0]:
                 new_colors = base_colors.copy()

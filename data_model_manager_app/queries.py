@@ -1,6 +1,6 @@
 from . import models
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 
 # permission
@@ -32,6 +32,15 @@ def get_user_by_username(username):
 def get_all_user():
     try:
         users = models.User.objects.all()
+        return users
+    except ObjectDoesNotExist:
+        return None
+
+
+def get_all_user_by_role(role_name):
+    try:
+        role = get_role_by_name(role_name)
+        users = models.User.objects.filter(role=role)
         return users
     except ObjectDoesNotExist:
         return None
@@ -81,6 +90,22 @@ def get_data_by_filter(reverse=False, num=None, **kwargs):
     except ObjectDoesNotExist:
         return None
 
+
+def get_sum_data_size():
+    try:
+        data = models.Data.objects.all().aggregate(Sum('size_on_disk'))
+        return data
+    except ObjectDoesNotExist:
+        return None
+
+
+def get_sum_data_size_by_category(category):
+    try:
+        category = models.DataCategory.objects.get(name=category)
+        data = models.Data.objects.filter(data_category=category).aggregate(Sum('size_on_disk'))
+        return data
+    except ObjectDoesNotExist:
+        return None
 
 def delete_data(data):
     try:
@@ -139,6 +164,22 @@ def get_model_train_data(reverse=False):
         data = models.ModelTrainData.objects.all()
         if reverse:
             data = data.order_by('-id')
+        return data
+    except ObjectDoesNotExist:
+        return None
+
+
+def get_model_train_data_by_id(id):
+    try:
+        data = models.ModelTrainData.objects.get(id=id)
+        return data
+    except ObjectDoesNotExist:
+        return None
+
+
+def get_model_train_data_by_filter(**kwargs):
+    try:
+        data = models.ModelTrainData.objects.filter(**kwargs).order_by('-id')
         return data
     except ObjectDoesNotExist:
         return None

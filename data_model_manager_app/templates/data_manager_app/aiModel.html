@@ -18,7 +18,7 @@
         <div class="delete-confirm" id="delete-confirm">
             <form id="confirm-delete">
                 {% csrf_token %}
-                <h4 class="text-center" style="color:red"> Delete </h4>
+                <h4 id='delete-label' class="text-center" style="color:red"> Delete </h4>
                 <div id="delete-content">
                     <h5 class="text-center" id="delete-item"></h5>
                     <div class="text-center">
@@ -38,7 +38,9 @@
                 <th class="text-center"> Id </th>
                 <th class="text-center">Model name</th>
                 <th class="text-center">Model owner</th>
+                {% if request.user.role.role_name != 'guest' %}
                 <th class="action text-center">Action</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -52,8 +54,6 @@
                             <button class="btn btn-primary" onclick="onClick(this.id)" id="{% url 'ai_model_detail' model.model_id %}">Edit</button>
                             <button class="btn btn-danger" onclick="openDeleteConfirm(this.name)" name="{% url 'ai_model_detail' model.model_id %}">Delete</button>
                         </td>
-                    {% else %}
-                        <td class="action text-center">None</td>
                     {% endif %}
                 </tr>
             {% endfor %}
@@ -156,4 +156,9 @@
         </form>
     </div>
     <!-- End search form -->
+{% endblock %}
+{% block loading %}
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
 {% endblock %}

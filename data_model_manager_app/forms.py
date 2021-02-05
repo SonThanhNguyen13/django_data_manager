@@ -1,5 +1,6 @@
 from . import models
 from django import forms
+from django.forms import Textarea
 
 
 class DataCategoryForm(forms.ModelForm):
@@ -24,13 +25,13 @@ class DataForm(forms.ModelForm):
             'size_on_disk',
             'number_of_images',
             'number_of_classes',
-            'iqa_0',
-            'iqa_1',
-            'iqa_2',
+            'brisque',
+            'brightness',
+            'sharpness',
             'iqa_3',
             'iqa_4',
-            'shape_0',
-            'shape_1',
+            'mean_width',
+            'mean_height',
             'shape_2',
             'shape_3',
             'shape_4',
@@ -41,10 +42,21 @@ class DataForm(forms.ModelForm):
                 self.fields[name].widget.attrs.update({
                     'class': 'form-control',
                 })
+            elif name == 'note':
+                pass
             else:
                 self.fields[name].widget.attrs.update({
                     'class': 'form-control',
                 })
+        self.fields['best_result'].widget.attrs.update({
+            'placeholder': "Metric: Accuracy",
+        })
+        self.fields['size_on_disk'].widget.attrs.update({
+            'placeholder': "GB",
+        })
+        self.fields['directory_of_data'].widget.attrs.update({
+            'placeholder': "Data on which pc?",
+        })
 
     class Meta:
         model = models.Data
@@ -55,13 +67,13 @@ class DataForm(forms.ModelForm):
             'directory_of_data',
             'number_of_images',
             'number_of_classes',
-            'iqa_0',
-            'iqa_1',
-            'iqa_2',
+            'brisque',
+            'brightness',
+            'sharpness',
             'iqa_3',
             'iqa_4',
-            'shape_0',
-            'shape_1',
+            'mean_width',
+            'mean_height',
             'shape_2',
             'shape_3',
             'shape_4',
@@ -69,7 +81,11 @@ class DataForm(forms.ModelForm):
             'best_result',
             'best_analyzed_model',
             'data_avatar',
+            'note',
         ]
+        widgets = {
+            'note': Textarea(attrs={'cols': 57, 'rows': 3}),
+        }
 
 
 class DataFilterForm(forms.ModelForm):
@@ -88,12 +104,8 @@ class DataFilterForm(forms.ModelForm):
         fields = [
             'name',
             'data_category',
-            'size_on_disk',
             'directory_of_data',
-            'number_of_images',
-            'number_of_classes',
             'analyzed',
-            'best_result',
             'best_analyzed_model',
             'data_owner',
         ]
@@ -136,6 +148,8 @@ class SearchModelTrainData(forms.ModelForm):
                 'class': 'form-control'
             })
             self.fields[name].required = False
+        self.fields['result'].widget.attrs['min'] = 0
+        self.fields['result'].widget.attrs['max'] = 100
 
     class Meta:
         model = models.ModelTrainData
@@ -149,7 +163,11 @@ class AddModelTrainData(forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class': 'form-control'
             })
+        self.fields['result'].widget.attrs['min'] = 0
+        self.fields['result'].widget.attrs['max'] = 100
 
     class Meta:
         model = models.ModelTrainData
-        fields = "__all__"
+        fields = ['data', 'model', 'result']
+
+

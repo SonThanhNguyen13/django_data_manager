@@ -16,11 +16,13 @@
     {% block css %}
     {% endblock %}
 </head>
+{% block loading %}
+{% endblock %}
 <body>
 <div class="wrapper d-flex align-items-stretch">
     <nav id="sidebar">
         <div class="p-4 pt-5">
-            <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(/static/images/images.jpeg);"></a>
+            <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(/static/images/tenor.gif);"></a>
             <ul class="list-unstyled components mb-5">
                 <li>
                     <a href="{% url 'home' %}">Home</a>
@@ -51,18 +53,18 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="">Data & model</a>
+                    <a href="{% url 'model_train_data' %}">Models train on data</a>
                 </li>
                 <li>
                     <a href="{% url 'change_password' %}">Change password</a>
                 </li>
                 <li>
-                    <a href="#">About</a>
+                    <a href="{% url 'fun' %}">About</a>
                 </li>
             </ul>
 
             <div class="footer">
-                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>. </br>Template by <a href="https://colorlib.com" target="_blank" style="color:pink">Colorlib.com</a>
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>. </br><a href="https://colorlib.com" target="_blank" style="color:pink">Colorlib.com</a>
                 <p style="color: deeppink">Stolen  by STN</p>
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
             </div>
@@ -77,7 +79,7 @@
                     <i class="fa fa-bars"></i>
                     <span class="sr-only">Toggle Menu</span>
                 </button>
-                <span style="color: red; margin-left:3%; font-size:25px"> Hello {{user.username}}</span>
+                <span style="color: red; margin-left:3%; font-size:25px">{{user.username}}</span>
                 <span class="my-role" style="margin-left:1%;">role: {{ request.user.role.role_name }}</span>
 
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +92,7 @@
                             <a class="nav-link" href="{% url 'home' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" href="{% url 'fun' %}">About</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">Log out</a>

@@ -1,3 +1,6 @@
+$(document).ready(function() {
+      document.title = "Models"
+});
 $("#ai-model").submit(function (e) {
     // preventing from page reload and default actions
     e.preventDefault();
@@ -48,7 +51,7 @@ function openAddForm(url){
 function closeAddForm(){
     let message = $("#form-label").html();
     if (message.startsWith("Success")){
-        location.reload()
+        window.location.href = "/models/";
     }
     else{
         document.getElementById("add-frame").style.display = "none";
@@ -58,7 +61,6 @@ function closeAddForm(){
     }
 
 }
-
 
 function onClick(url){
     document.getElementById("table-content").style.display = "none";
@@ -72,6 +74,7 @@ function onClick(url){
 
 function openDeleteConfirm(url){
     $("#buttons").css('display', 'none')
+    document.getElementById("delete-label").innerHTML = "Delete";
     document.getElementById("confirm-delete").action = url;
     model_id = url.split("/")[2]
     name = document.getElementById(model_id).innerHTML
@@ -82,6 +85,7 @@ function openDeleteConfirm(url){
 
 function closeDeleteConfirm(){
     $("#message").html("")
+    document.getElementById("delete-label").innerHTML = "Delete";
     $("#delete-confirm").css("display","none")
     $("#table-content").css("display", "block")
     $("#buttons").css('display', 'block')
@@ -98,14 +102,17 @@ $('#confirm-delete').submit(function(event){
                 success: function(response){
                     $('#delete-confirm').css("display", "none")
                     $("#message").css('color', 'green')
-                    $("#message").html("Success. Redirect to model page after 2 seconds")
-                    setTimeout(function(){ window.location = "/models/"; },2000);
+                    $("#message").html("Success. Redirect to model page after 1 seconds")
+                    setTimeout(function(){ window.location = "/models/"; },1000);
                 },
                 error: function(response){
-                    document.getElementById("message").innerHTML = response["responseJSON"]["error"];
-                    document.getElementById("message").style.color = "red"
+                    document.getElementById("delete-label").innerHTML = response["responseJSON"]["error"];
+                    document.getElementById("delete-label").style.color = "red"
                 }
             }
         )
     }
 )
+$(window).on("load",function(){
+    $("#loader-wrapper").fadeOut("fast");
+});

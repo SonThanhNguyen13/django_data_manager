@@ -1,3 +1,6 @@
+$(document).ready(function() {
+      document.title = "Data Categories"
+});
 $("#data-category").submit(function (e) {
     // preventing from page reload and default actions
     e.preventDefault();
@@ -62,3 +65,6 @@ function onClick(url){
     document.getElementById("data-category").action = url;
     document.getElementById("add-frame").style.display = "block";
 }
+$(window).on("load",function(){
+    $("#loader-wrapper").fadeOut("fast");
+});

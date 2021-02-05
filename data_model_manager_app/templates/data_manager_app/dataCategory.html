@@ -30,7 +30,9 @@
             <tr>
                 <th class="text-center"> Id </th>
                 <th class="text-center">Data category</th>
+                {% if request.user.role.role_name != 'guest' %}
                 <th class="action text-center">Action</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -40,8 +42,6 @@
                     <td id={{ data.data_category_id }} class="text-center">{{ data.name }}</td>
                     {% if request.user.role.role_name != 'guest' %}
                         <td class="action text-center"><button class="btn btn-danger" onclick="onClick(this.id)" id="{% url 'update_data_category' data.data_category_id %}">Edit</button></td>
-                    {% else %}
-                        <td class="action text-center">None</td>
                     {% endif %}
                 </tr>
             {% endfor %}
@@ -101,3 +101,8 @@
 {% block javascript %}
     <script src="{% static 'js/dataCategory.js' %}"> </script>
 {% endblock javascript %}
+{% block loading %}
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
+{% endblock %}
