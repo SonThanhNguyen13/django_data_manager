@@ -36,7 +36,17 @@ class DataForm(forms.ModelForm):
             'shape_3',
             'shape_4',
         ]
+        required_fields = [
+            'name',
+            'data_category',
+            'size_on_disk',
+            'directory_of_data',
+            'number_of_images',
+            'number_of_classes',
+        ]
         for name in self.fields.keys():
+            if name in required_fields:
+                self.fields[name].label = self.fields[name].label + " *"
             if name in has_min_zero:
                 self.fields[name].widget.attrs['min'] = 0
                 self.fields[name].widget.attrs.update({

@@ -48,7 +48,7 @@ class ShowPermission(admin.ModelAdmin):
     list_filter = ('permission_name', 'method', 'permission_url_name')
 
 
-class ShowRoleHasPermisson(admin.ModelAdmin):
+class ShowRoleHasPermission(admin.ModelAdmin):
     list_display = ["role", 'permission']
     list_filter = ["role", 'permission']
 
@@ -85,7 +85,7 @@ class ShowModelAndData(admin.ModelAdmin):
 admin.site.register(models.User, CustomUserAdmin)
 admin.site.register(models.Role, ShowRole)
 admin.site.register(models.Permission, ShowPermission)
-admin.site.register(models.RoleHasPermisson, ShowRoleHasPermisson)
+admin.site.register(models.RoleHasPermission, ShowRoleHasPermission)
 admin.site.register(models.DataCategory)
 admin.site.register(models.Data, ShowDatas)
 admin.site.register(models.AiModel, ShowAiModels)

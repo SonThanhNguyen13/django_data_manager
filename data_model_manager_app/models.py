@@ -63,7 +63,7 @@ class Permission(models.Model):
         return self.permission_name
 
 
-class RoleHasPermisson(models.Model):
+class RoleHasPermission(models.Model):
     id = models.AutoField(primary_key=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission, on_delete=models.CASCADE)

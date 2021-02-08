@@ -1,4 +1,4 @@
-from . import queries
+from data_model_manager_app import queries
 from django.urls import resolve
 
 

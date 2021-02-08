@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from . import views, data_manager_views, model_manager_views, data_model_manager
+from .views import views, data_manager_views, ai_model_manager_views, data_model_manager_views
 from django.conf import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -39,16 +39,16 @@ urlpatterns = [
     path('data/visualize/chart_size', data_manager_views.ChartBySize.as_view(), name='data_chart_by_size'),
     path('data/visualize/chart_by_analyzed', data_manager_views.ChartByAnalyzed.as_view(), name='analyzed_data_chart'),
     # model_manager_views.py
-    path("models/", model_manager_views.AiModel.as_view(), name="ai_model"),
-    path("models/<int:id>", model_manager_views.AiModelDetail.as_view(), name='ai_model_detail'),
-    path("models/search/", model_manager_views.SearchAiModel.as_view(), name='search_ai_model'),
-    path("model/visualize", model_manager_views.ModelVisualize.as_view(), name='model_visualize'),
+    path("models/", ai_model_manager_views.AiModel.as_view(), name="ai_model"),
+    path("models/<int:id>", ai_model_manager_views.AiModelDetail.as_view(), name='ai_model_detail'),
+    path("models/search/", ai_model_manager_views.SearchAiModel.as_view(), name='search_ai_model'),
+    path("model/visualize", ai_model_manager_views.ModelVisualize.as_view(), name='model_visualize'),
         # api for chart
-    path('model/visualize/chart', model_manager_views.ModelChart.as_view(), name='model_chart'),
+    path('model/visualize/chart', ai_model_manager_views.ModelChart.as_view(), name='model_chart'),
     # model_train_data.py
-    path("model_data/", data_model_manager.ModelTrainData.as_view(), name='model_train_data'),
-    path("model_data/<int:id>", data_model_manager.ModelTrainDataDetail.as_view(), name='model_train_data_detail'),
-    path('model_data/search/', data_model_manager.SearchModelTrainData.as_view(), name='model_train_data_search'),
+    path("model_data/", data_model_manager_views.ModelTrainData.as_view(), name='model_train_data'),
+    path("model_data/<int:id>", data_model_manager_views.ModelTrainDataDetail.as_view(), name='model_train_data_detail'),
+    path('model_data/search/', data_model_manager_views.SearchModelTrainData.as_view(), name='model_train_data_search'),
     # for fun only
     path('fun/', views.Fun.as_view(), name='fun'),
 ]

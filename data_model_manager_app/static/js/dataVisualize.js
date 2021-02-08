@@ -56,7 +56,7 @@ $(document).ready(function() {
                             },
                             {
                                 render: 'percentage',
-                                fontSize: 30,
+                                fontSize: 20,
                                 fontStyle: 'bold',
                                 fontColor: '#FFF',
                                 fontFamily: '"Lucida Console", Monaco, monospace',

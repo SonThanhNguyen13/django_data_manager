@@ -6,7 +6,7 @@ from django.db.models import Count, Sum
 # permission
 def get_permission_by_role(role):
     # get all permissions a role has
-    permissions = models.RoleHasPermisson.objects.filter(role=role)
+    permissions = models.RoleHasPermission.objects.filter(role=role)
     # convert to id
     permissions = [i.permission.permission_id for i in permissions]
     return permissions
@@ -106,13 +106,6 @@ def get_sum_data_size_by_category(category):
         return data
     except ObjectDoesNotExist:
         return None
-
-def delete_data(data):
-    try:
-        data.delete()
-        return True
-    except ObjectDoesNotExist:
-        return False
 
 
 # data category
