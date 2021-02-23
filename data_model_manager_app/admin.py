@@ -53,7 +53,7 @@ class ShowRoleHasPermission(admin.ModelAdmin):
     list_filter = ["role", 'permission']
 
 
-class ShowDatas(admin.ModelAdmin):
+class ShowDataset(admin.ModelAdmin):
     list_per_page = 30
     list_display = ["data_id", 'name','data_category', "analyzed", "best_result", "best_analyzed_model", 'data_owner']
     list_filter = ["data_category", "analyzed", "best_analyzed_model", 'data_owner']
@@ -87,6 +87,6 @@ admin.site.register(models.Role, ShowRole)
 admin.site.register(models.Permission, ShowPermission)
 admin.site.register(models.RoleHasPermission, ShowRoleHasPermission)
 admin.site.register(models.DataCategory)
-admin.site.register(models.Data, ShowDatas)
+admin.site.register(models.Dataset, ShowDataset)
 admin.site.register(models.AiModel, ShowAiModels)
 admin.site.register(models.ModelTrainData, ShowModelAndData)

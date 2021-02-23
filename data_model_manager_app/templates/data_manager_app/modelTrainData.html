@@ -38,9 +38,7 @@
                 <th class="text-center"> Id </th>
                 <th class="text-center">Data</th>
                 <th class="text-center">Data category</th>
-                <th class="text-center">Data owner</th>
                 <th class="text-center">Model name</th>
-                <th class="text-center">Model owner</th>
                 <th class="text-center">Result</th>
                 <th class="text-center">Added by</th>
                 {% if request.user.role.role_name != 'guest' %}
@@ -52,12 +50,10 @@
             {% for data in datas %}
                 <tr>
                     <td class="text-center"> {{forloop.counter}} </td>
-                    <td id={{ data.data.data_id }} class="text-center">{{ data.data.name }}</td>
+                    <td class="text-center"><b>{{ data.data.name }}</b></td>
                     <td class="text-center">{{ data.data.data_category }}</td>
-                    <td class="text-center">{{ data.data.data_owner }}</td>
-                    <td class="text-center">{{ data.model.model_name }}</td>
-                    <td class="text-center">{{ data.model.model_owner }}</td>
-                    <td class="text-center">{{ data.result }}</td>
+                    <td class="text-center"><b>{{ data.model.model_name }}</b></td>
+                    <td class="text-center"><b>{{ data.result }}</b></td>
                     <td class="text-center">{{ data.added_by }}</td>
                     {% if request.user.role.role_name != 'guest' %}
                         <td class="action text-center">

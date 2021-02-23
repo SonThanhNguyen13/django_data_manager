@@ -6,18 +6,21 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class Role(models.Model):
     role_id = models.AutoField(primary_key=True)
     role_name = models.CharField(max_length=512)
-    
+
     def __str__(self):
         return self.role_name
 
 
+# Account manager
 class AccountUserManager(BaseUserManager):
+    # create user
     def create_user(self, username, password=None, **extra_fields):
         user = self.model(username=username)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
+    # create admin
     def create_superuser(self, username, password=None, role_id=None, **extra_fields):
         user = self.create_user(
             username=username,
@@ -29,6 +32,7 @@ class AccountUserManager(BaseUserManager):
         return user
 
 
+# user
 class User(PermissionsMixin, AbstractBaseUser):
     username = models.CharField(max_length=25, unique=True)
     password = models.CharField(max_length=512)
@@ -40,7 +44,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     objects = AccountUserManager()
     REQUIRED_FIELD = ['role_id', ]
     USERNAME_FIELD = 'username'
-    
+
     def __str__(self):
         return self.username
 
@@ -85,8 +89,9 @@ class AiModel(models.Model):
     def __str__(self):
         return self.model_name
 
+
 # mai fix :D
-class Data(models.Model):
+class Dataset(models.Model):
     data_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=512)
     data_category = models.ForeignKey(DataCategory, on_delete=models.CASCADE)
@@ -117,7 +122,7 @@ class Data(models.Model):
 
 class ModelTrainData(models.Model):
     id = models.AutoField(primary_key=True)
-    data = models.ForeignKey(Data, on_delete=models.CASCADE)
+    data = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     model = models.ForeignKey(AiModel, on_delete=models.CASCADE)
     added_by = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
-    result = models.FloatField(default=0.0)
+    result = models.FloatField(blank=True, null=True)

@@ -57,7 +57,7 @@ def get_role_by_name(role_name):
 
 # data
 def get_all_data(reverse=False):
-    all_data = models.Data.objects.all()
+    all_data = models.Dataset.objects.all()
     if reverse:
         return all_data.order_by("-data_id")
     return all_data
@@ -65,7 +65,7 @@ def get_all_data(reverse=False):
 
 def get_data_by_id(id):
     try:
-        data = models.Data.objects.get(data_id=id)
+        data = models.Dataset.objects.get(data_id=id)
         return data
     except ObjectDoesNotExist:
         return None
@@ -73,7 +73,7 @@ def get_data_by_id(id):
 
 def get_data_by_analyzed():
     try:
-        data = models.Data.objects.values('analyzed').annotate(dcount=Count('analyzed'))
+        data = models.Dataset.objects.values('analyzed').annotate(dcount=Count('analyzed'))
         return data
     except ObjectDoesNotExist:
         return None
@@ -81,7 +81,7 @@ def get_data_by_analyzed():
 
 def get_data_by_filter(reverse=False, num=None, **kwargs):
     try:
-        data = models.Data.objects.filter(**kwargs)
+        data = models.Dataset.objects.filter(**kwargs)
         if reverse:
             data = data.order_by('-data_id')
         if num:
@@ -93,7 +93,7 @@ def get_data_by_filter(reverse=False, num=None, **kwargs):
 
 def get_sum_data_size():
     try:
-        data = models.Data.objects.all().aggregate(Sum('size_on_disk'))
+        data = models.Dataset.objects.all().aggregate(Sum('size_on_disk'))
         return data
     except ObjectDoesNotExist:
         return None
@@ -102,7 +102,7 @@ def get_sum_data_size():
 def get_sum_data_size_by_category(category):
     try:
         category = models.DataCategory.objects.get(name=category)
-        data = models.Data.objects.filter(data_category=category).aggregate(Sum('size_on_disk'))
+        data = models.Dataset.objects.filter(data_category=category).aggregate(Sum('size_on_disk'))
         return data
     except ObjectDoesNotExist:
         return None
@@ -152,7 +152,7 @@ def get_model_by_filter(reverse=False, **kwargs):
 
 
 # Model train data:
-def get_model_train_data(reverse=False):
+def get_all_model_train_data(reverse=False):
     try:
         data = models.ModelTrainData.objects.all()
         if reverse:

@@ -1,0 +1,25 @@
+{% extends 'data_manager_app/base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/modelTrainDataVisualize.css' %}">
+{% endblock %}
+{% block content %}
+        <div class="all-records">
+            <canvas id="all-records-chart" data-url="{% url 'model_train_data_visualize_chart' %}"></canvas>
+            <div class="my-chart" id="my-chart">
+                <p>Number of Records: </p>
+                <h2> {{ number_of_records }}</h2>
+            </div>
+        </div>
+
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/Chart.min.js' %}"></script>
+    <script src="{% static 'js/modelTrainDataVisualize.js' %}"></script>
+    <script src="{% static 'js/chartjs-plugin-labels.js' %}"></script>
+{% endblock %}
+{% block loading %}
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
+{% endblock %}

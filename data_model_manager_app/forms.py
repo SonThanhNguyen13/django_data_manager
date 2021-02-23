@@ -21,6 +21,7 @@ class DataCategoryForm(forms.ModelForm):
 class DataForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DataForm, self).__init__(*args, **kwargs)
+        # min value is zero in form
         has_min_zero = [
             'size_on_disk',
             'number_of_images',
@@ -36,6 +37,7 @@ class DataForm(forms.ModelForm):
             'shape_3',
             'shape_4',
         ]
+        # required fields in form
         required_fields = [
             'name',
             'data_category',
@@ -45,19 +47,25 @@ class DataForm(forms.ModelForm):
             'number_of_classes',
         ]
         for name in self.fields.keys():
+            # add * to required fields
             if name in required_fields:
                 self.fields[name].label = self.fields[name].label + " *"
+            # add min zero to number fields
             if name in has_min_zero:
                 self.fields[name].widget.attrs['min'] = 0
                 self.fields[name].widget.attrs.update({
                     'class': 'form-control',
                 })
+            # do not add to note fields
             elif name == 'note':
                 pass
+            # add a "form-control" class to each form input
+            # for enabling bootstrap
             else:
                 self.fields[name].widget.attrs.update({
                     'class': 'form-control',
                 })
+        # add place hoder to some input fields
         self.fields['best_result'].widget.attrs.update({
             'placeholder': "Metric: Accuracy",
         })
@@ -69,7 +77,8 @@ class DataForm(forms.ModelForm):
         })
 
     class Meta:
-        model = models.Data
+        # declare fields for add data form model
+        model = models.Dataset
         fields = [
             'name',
             'data_category',
@@ -110,7 +119,8 @@ class DataFilterForm(forms.ModelForm):
             })
 
     class Meta:
-        model = models.Data
+        # declare fields for data search form
+        model = models.Dataset
         fields = [
             'name',
             'data_category',
@@ -132,6 +142,7 @@ class AiModelForm(forms.ModelForm):
             })
 
     class Meta:
+        # declare fields for add new model form
         model = models.AiModel
         fields = ["model_name",]
 
@@ -146,8 +157,27 @@ class SearchAiModelForm(forms.ModelForm):
             self.fields[name].required = False
 
     class Meta:
+        # declare fields for search model form
         model = models.AiModel
         fields = "__all__"
+
+
+class AddModelTrainData(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AddModelTrainData, self).__init__(*args, **kwargs)
+        # add bootstrap
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control'
+            })
+        # set min max value for result fields
+        self.fields['result'].widget.attrs['min'] = 0
+        self.fields['result'].widget.attrs['max'] = 100
+
+    class Meta:
+        # declare fields for add record model trains data
+        model = models.ModelTrainData
+        fields = ['data', 'model', 'result']
 
 
 class SearchModelTrainData(forms.ModelForm):
@@ -160,24 +190,11 @@ class SearchModelTrainData(forms.ModelForm):
             self.fields[name].required = False
         self.fields['result'].widget.attrs['min'] = 0
         self.fields['result'].widget.attrs['max'] = 100
+        self.fields['result'].widget.attrs.update({
+            'placeholder': "Accuracy greater than",
+        })
 
     class Meta:
+        # declare fields for search record model trains data
         model = models.ModelTrainData
         fields = "__all__"
-
-
-class AddModelTrainData(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(AddModelTrainData, self).__init__(*args, **kwargs)
-        for name in self.fields.keys():
-            self.fields[name].widget.attrs.update({
-                'class': 'form-control'
-            })
-        self.fields['result'].widget.attrs['min'] = 0
-        self.fields['result'].widget.attrs['max'] = 100
-
-    class Meta:
-        model = models.ModelTrainData
-        fields = ['data', 'model', 'result']
-
-

@@ -26,16 +26,16 @@
                     <a href="{% url 'home' %}">Home</a>
                 </li>
                 <li>
-                    <a href="#dataMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Data Manager</a>
+                    <a href="#dataMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Dataset Manager</a>
                     <ul class="collapse list-unstyled" id="dataMenu">
                         <li>
-                            <a href="{% url 'data_page' %}">All data</a>
+                            <a href="{% url 'data_page' %}">All dataset</a>
                         </li>
                         <li>
-                            <a href="{% url 'data_category' %}">Data categories</a>
+                            <a href="{% url 'data_category' %}">Dataset categories</a>
                         </li>
                         <li>
-                            <a href="{% url 'data_visualize' %}">Visualize</a>
+                            <a href="{% url 'data_visualize' %}">Dataset visualize</a>
                         </li>
                     </ul>
                 </li>
@@ -51,7 +51,15 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{% url 'model_train_data' %}">Models train on data</a>
+                    <a href="#dataModelMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Model train data</a>
+                    <ul class="collapse list-unstyled" id="dataModelMenu">
+                        <li>
+                            <a href="{% url 'model_train_data' %}">Result</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'model_train_data_visualize' %}">Visualize</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="{% url 'change_password' %}">Change password</a>

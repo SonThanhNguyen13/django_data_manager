@@ -95,8 +95,8 @@ $('#confirm-delete').submit(function(event){
                 success: function(response){
                     $('#delete-confirm').css("display", "none")
                     $("#message").css('color', 'green')
-                    $("#message").html("Success. Redirect to previous page after 2 seconds")
-                    setTimeout(function(){ window.location = "/model_data/"; },2000);
+                    $("#message").html("Success. Redirect to previous page after 0.5 seconds")
+                    setTimeout(function(){ window.location = "/model_data/"; },500);
                 },
                 error: function(response){
                     document.getElementById("message").innerHTML = response["responseJSON"]["error"];

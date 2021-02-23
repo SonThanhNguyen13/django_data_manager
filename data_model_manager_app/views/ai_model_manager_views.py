@@ -10,6 +10,9 @@ from data_model_manager_app.check_permission import has_permission, return_url_n
 
 
 class AiModel(LoginRequiredMixin, View):
+    """
+    View and create new ai_model data
+    """
     login_url = "/login/"
     form_class = forms.AiModelForm
     search_form = forms.SearchAiModelForm
@@ -67,6 +70,9 @@ class AiModel(LoginRequiredMixin, View):
 
 
 class AiModelDetail(LoginRequiredMixin, View):
+    """
+    Update and delete new ai_model data
+    """
     login_url = '/login/'
     form_class = forms.AiModelForm
 
@@ -135,25 +141,10 @@ class AiModelDetail(LoginRequiredMixin, View):
             return JsonResponse({'error': 'Something when terribly wrong'})
 
 
-class ModelVisualize(LoginRequiredMixin, View):
-    login_url = '/login/'
-
-    def get(self, request):
-        # get count number
-        number_of_models = queries.get_all_ai_model().count()
-        # get count user by role 'user'
-        number_of_users = queries.get_all_user_by_role('user').count()
-        return render(
-            request,
-            'data_manager_app/modelVisualize.html',
-            {
-                'number_of_users': number_of_users,
-                'number_of_models': number_of_models,
-            }
-        )
-
-
 class SearchAiModel(LoginRequiredMixin, View):
+    """
+    Search ai model by filter
+    """
     login_url = '/login/'
     # add, edit form
     form_class = forms.AiModelForm
@@ -205,7 +196,31 @@ class SearchAiModel(LoginRequiredMixin, View):
             )
 
 
+class ModelVisualize(LoginRequiredMixin, View):
+    """
+    Visualize ai model data
+    """
+    login_url = '/login/'
+
+    def get(self, request):
+        # get count number
+        number_of_models = queries.get_all_ai_model().count()
+        # get count user by role 'user'
+        number_of_users = queries.get_all_user_by_role('user').count()
+        return render(
+            request,
+            'data_manager_app/aiModelVisualize.html',
+            {
+                'number_of_users': number_of_users,
+                'number_of_models': number_of_models,
+            }
+        )
+
+
 class ModelChart(LoginRequiredMixin, View):
+    """
+    API for chart data
+    """
     login_url = '/login/'
 
     def get(self, request):
